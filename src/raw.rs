@@ -30,7 +30,7 @@ extern "C" {
     pub fn leap();
     pub fn sleep_remaining_tick();
     pub fn sleep(cycles: u64);
-    pub fn split() -> u32;
+    pub fn split();
     pub fn suicide();
 
     // current position using "screen" coordinates (top-left is 0,0)

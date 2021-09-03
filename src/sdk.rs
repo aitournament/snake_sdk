@@ -26,12 +26,6 @@ pub struct SnakeInfo {
     snake_id: u32,
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-pub enum SplitResult {
-    Front,
-    Back,
-}
-
 pub fn get_cpu_cycles_per_tick() -> u64 {
     unsafe { raw::get_cpu_cycles_per_tick() }
 }
@@ -101,12 +95,8 @@ pub fn suicide() {
 }
 
 
-pub fn split() -> SplitResult {
-    match unsafe { raw::split() } {
-        raw::SPLIT_RESULT_FRONT => SplitResult::Front,
-        raw::SPLIT_RESULT_BACK => SplitResult::Back,
-        _ => unsafe { unreachable_unchecked() }
-    }
+pub fn split() {
+    unsafe { raw::split() }
 }
 
 pub fn observe(x: u32, y: u32) -> Observation {
