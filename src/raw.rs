@@ -10,6 +10,7 @@ pub const TYPE_EMPTY: u32 = 0;
 pub const TYPE_FOOD: u32 = 1;
 pub const TYPE_SNAKE_HEAD: u32 = 2;
 pub const TYPE_SNAKE_BODY: u32 = 3;
+pub const TYPE_DEAD_SNAKE: u32 = 4;
 
 pub const SPLIT_RESULT_FRONT: u32 = 0;
 pub const SPLIT_RESULT_BACK: u32 = 1;
@@ -21,7 +22,7 @@ extern "C" {
     // constants
     pub fn get_arena_width() -> u32;
     pub fn get_arena_height() -> u32;
-    pub fn get_cpu_cycles_per_tick() -> u64;
+    pub fn get_cpu_cycles_per_tick() -> u32;
     // pub fn get_owner_id() -> u32;
 
     // actions
@@ -35,9 +36,10 @@ extern "C" {
 
     // current position using "screen" coordinates (top-left is 0,0)
     pub fn get_current_pos(x_out: *mut u32, y_out: *mut u32);
-    pub fn observe(x: u32, y: u32, type_out: *mut u32, owner_id_out: *mut u32, snake_id_out: *mut u32);
+    pub fn observe(x: u32, y: u32, out_0: *mut u32, out_1: *mut u32, out_2: *mut u32, out_3: *mut u32);
 
     pub fn get_length() -> u32;
+    pub fn get_health() -> u32;
     pub fn get_current_tick() -> u64;
     pub fn get_current_cpu_cycle_in_tick() -> u64;
     pub fn rand(min: u32, max: u32) -> u32;

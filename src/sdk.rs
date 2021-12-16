@@ -1,6 +1,5 @@
 use crate::raw;
 use crate::raw::{DIRECTION_NORTH, DIRECTION_EAST, DIRECTION_WEST, DIRECTION_SOUTH};
-use core::ptr::read_volatile;
 use core::hint::unreachable_unchecked;
 use core::mem::MaybeUninit;
 
@@ -18,15 +17,19 @@ pub enum Observation {
     Food,
     SnakeHead(SnakeInfo),
     SnakeBody(SnakeInfo),
+
+    /// A dead snake, with the tick it will turn into food
+    DeadSnake(u32),
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SnakeInfo {
     owner_id: u32,
     snake_id: u32,
+    health: u32,
 }
 
-pub fn get_cpu_cycles_per_tick() -> u64 {
+pub fn get_cpu_cycles_per_tick() -> u32 {
     unsafe { raw::get_cpu_cycles_per_tick() }
 }
 
@@ -101,28 +104,36 @@ pub fn split() {
 
 pub fn observe(x: u32, y: u32) -> Observation {
     let mut type_out = MaybeUninit::<u32>::uninit();
-    let mut owner_id = MaybeUninit::<u32>::uninit();
-    let mut snake_id = MaybeUninit::<u32>::uninit();
+    let mut out_0 = MaybeUninit::<u32>::uninit();
+    let mut out_1 = MaybeUninit::<u32>::uninit();
+    let mut out_2 = MaybeUninit::<u32>::uninit();
     unsafe {
-        raw::observe(x, y, type_out.as_mut_ptr(), owner_id.as_mut_ptr(), snake_id.as_mut_ptr());
+        raw::observe(x, y, type_out.as_mut_ptr(), out_0.as_mut_ptr(), out_1.as_mut_ptr(), out_2.as_mut_ptr());
     }
     match unsafe { type_out.assume_init() } {
         raw::TYPE_EMPTY => Observation::Empty,
         raw::TYPE_FOOD => Observation::Food,
         raw::TYPE_SNAKE_HEAD => Observation::SnakeHead(SnakeInfo {
-            owner_id: unsafe { owner_id.assume_init() },
-            snake_id: unsafe { snake_id.assume_init() },
+            owner_id: unsafe { out_0.assume_init() },
+            snake_id: unsafe { out_1.assume_init() },
+            health: unsafe { out_2.assume_init() },
         }),
         raw::TYPE_SNAKE_BODY => Observation::SnakeBody(SnakeInfo {
-            owner_id: unsafe { owner_id.assume_init() },
-            snake_id: unsafe { snake_id.assume_init() },
+            owner_id: unsafe { out_0.assume_init() },
+            snake_id: unsafe { out_1.assume_init() },
+            health: unsafe { out_2.assume_init() },
         }),
+        raw::TYPE_DEAD_SNAKE => Observation::DeadSnake(unsafe { out_0.assume_init() }),
         _ => unsafe { unreachable_unchecked() }
     }
 }
 
 pub fn get_length() -> u32 {
     unsafe { raw::get_length() }
+}
+
+pub fn get_health() -> u32 {
+    unsafe { raw::get_health() }
 }
 
 pub fn rand(min: u32, max: u32) -> u32 {
