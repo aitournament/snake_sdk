@@ -1,1 +1,0 @@
-{"rustc":7409016768189200941,"features":"[]","target":7332425059130742057,"profile":17729903187224061422,"path":10872709659218687626,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/snake_vm_sdk-2c97d6ba92de9d23/dep-test-lib-snake_vm_sdk"}}],"rustflags":["-C","link-arg=-fuse-ld=lld"],"metadata":6418734119675353806,"config":2202906307356721367,"compile_kind":0}
