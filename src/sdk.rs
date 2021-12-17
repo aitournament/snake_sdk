@@ -24,14 +24,14 @@ pub enum Observation {
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct FoodInfo {
-    health_value: i32,
+    pub health_value: i32,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SnakeInfo {
-    owner_id: u32,
-    snake_id: u32,
-    health: u32,
+    pub owner_id: u32,
+    pub snake_id: u32,
+    pub health: u32,
 }
 
 pub fn get_cpu_cycles_per_tick() -> u32 {
