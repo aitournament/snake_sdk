@@ -14,12 +14,17 @@ pub enum Direction {
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum Observation {
     Empty,
-    Food,
+    Food(FoodInfo),
     SnakeHead(SnakeInfo),
     SnakeBody(SnakeInfo),
 
     /// A dead snake, with the tick it will turn into food
     DeadSnake(u32),
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub struct FoodInfo {
+    health_value: i32,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
@@ -112,7 +117,9 @@ pub fn observe(x: u32, y: u32) -> Observation {
     }
     match unsafe { type_out.assume_init() } {
         raw::TYPE_EMPTY => Observation::Empty,
-        raw::TYPE_FOOD => Observation::Food,
+        raw::TYPE_FOOD => Observation::Food(FoodInfo{
+            health_value: unsafe {out_0.assume_init() as i32}
+        }),
         raw::TYPE_SNAKE_HEAD => Observation::SnakeHead(SnakeInfo {
             owner_id: unsafe { out_0.assume_init() },
             snake_id: unsafe { out_1.assume_init() },
@@ -123,7 +130,6 @@ pub fn observe(x: u32, y: u32) -> Observation {
             snake_id: unsafe { out_1.assume_init() },
             health: unsafe { out_2.assume_init() },
         }),
-        raw::TYPE_DEAD_SNAKE => Observation::DeadSnake(unsafe { out_0.assume_init() }),
         _ => unsafe { unreachable_unchecked() }
     }
 }
