@@ -61,28 +61,35 @@ pub fn leap() {
     }
 }
 
+/// Sleep (do nothing) for all remaining CPU cycles in the current tick. There is no difference in sleeping
+/// vs "busy waiting" manually, this is just for convenience.
 pub fn sleep_remaining_tick() {
     unsafe {
         raw::sleep_remaining_tick();
     }
 }
 
+/// Sleep (do nothing) for a specific number of cycles.
 pub fn sleep(cycles: u64) {
     unsafe { raw::sleep(cycles) }
 }
 
+/// Get the width of the arena. This is constant and does not change during a game.
 pub fn get_arena_width() -> u32 {
     unsafe { raw::get_arena_width() }
 }
 
+/// Get the height of the arena. This is constant and does not change during a game.
 pub fn get_arena_height() -> u32 {
     unsafe { raw::get_arena_height() }
 }
 
+/// Get the (width, height) of the arena. This is constant and does not change during a game.
 pub fn get_arena_size() -> (u32, u32) {
     (get_arena_width(), get_arena_height())
 }
 
+/// Get the current position of the head of the snake.
 pub fn get_current_pos() -> (u32, u32) {
     let mut x = MaybeUninit::<u32>::uninit();
     let mut y = MaybeUninit::<u32>::uninit();
@@ -92,22 +99,35 @@ pub fn get_current_pos() -> (u32, u32) {
     }
 }
 
+/// Get the current tick. Starts at 0.
 pub fn get_current_tick() -> u64 {
     unsafe { raw::get_current_tick() }
 }
 
+/// Gets the number of CPU cycles that have already executed in the current tick.
 pub fn get_current_cpu_cycle_in_tick() -> u64 {
     unsafe { raw::get_current_cpu_cycle_in_tick() }
 }
 
+/// Kill the snake (at the end of the current CPU cycle). All parts of the snake will turn into poisonous food.
 pub fn suicide() {
     unsafe { raw::suicide() }
 }
 
+/// If the snake has a length of at least 9, it is eligible to split into two parts.
+/// The snake is split into three parts (the middle is rounded up, the rest down). The first part will remain as
+/// the original snake. The middle part will be lost and turn into (poisonous) food. The end will become a new
+/// snake. The virtual machine running the snake will be forked, and both new snakes will run independently.
 pub fn split() {
     unsafe { raw::split() }
 }
 
+/// Get the id of the snake. This is constant, except after a `split`, where the new snake will have a new id.
+pub fn get_id() -> u32 {
+    unsafe { raw::get_id() }
+}
+
+/// View a certain position on the arena.
 pub fn observe(x: u32, y: u32) -> Observation {
     let mut type_out = MaybeUninit::<u32>::uninit();
     let mut out_0 = MaybeUninit::<u32>::uninit();
@@ -142,14 +162,21 @@ pub fn observe(x: u32, y: u32) -> Observation {
     }
 }
 
+/// Get the length of the snake.
 pub fn get_length() -> u32 {
     unsafe { raw::get_length() }
 }
 
+/// Get the current health of the snake. The maximum health is 100. The health decreases by 1 each tick.
+/// If the health of a snake ever reaches zero, it will die. A snake can gain health by eating food.
+/// Food has a health value, which is the amount health will increase. Food can have a negative health
+/// value (if it's poisonous).
 pub fn get_health() -> u32 {
     unsafe { raw::get_health() }
 }
 
+/// Get a random value between the min (inclusive) and max (exclusive).
+/// The returned value is deterministic based on the current state of the game and the initial seed.
 pub fn rand(min: u32, max: u32) -> u32 {
     unsafe { raw::rand(min, max) }
 }

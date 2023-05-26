@@ -14,8 +14,8 @@ pub const TYPE_SNAKE_BODY: u32 = 3;
 pub const SPLIT_RESULT_FRONT: u32 = 0;
 pub const SPLIT_RESULT_BACK: u32 = 1;
 
-pub const ERR_OK:i32 = 0;
-pub const ERR_COOL_DOWN:i32 = -1;
+pub const ERR_OK: i32 = 0;
+pub const ERR_COOL_DOWN: i32 = -1;
 
 extern "C" {
     // constants
@@ -35,8 +35,16 @@ extern "C" {
 
     // current position using "screen" coordinates (top-left is 0,0)
     pub fn get_current_pos(x_out: *mut u32, y_out: *mut u32);
-    pub fn observe(x: u32, y: u32, out_type: *mut u32, out_0: *mut u32, out_1: *mut u32, out_2: *mut u32);
+    pub fn observe(
+        x: u32,
+        y: u32,
+        out_type: *mut u32,
+        out_0: *mut u32,
+        out_1: *mut u32,
+        out_2: *mut u32,
+    );
 
+    pub fn get_id() -> u32;
     pub fn get_length() -> u32;
     pub fn get_health() -> u32;
     pub fn get_current_tick() -> u64;
