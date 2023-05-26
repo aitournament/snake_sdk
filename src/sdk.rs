@@ -21,12 +21,13 @@ pub enum Observation {
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct FoodInfo {
+    /// The amount of health that a snake will gain (or lose) by eating this food.
     pub health_value: i32,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct SnakeInfo {
-    pub owner_id: u32,
+    pub team_id: u32,
     pub snake_id: u32,
     pub health: u32,
 }
@@ -149,12 +150,12 @@ pub fn observe(x: u32, y: u32) -> Observation {
             health_value: unsafe { out_0.assume_init() as i32 },
         }),
         raw::TYPE_SNAKE_HEAD => Observation::SnakeHead(SnakeInfo {
-            owner_id: unsafe { out_0.assume_init() },
+            team_id: unsafe { out_0.assume_init() },
             snake_id: unsafe { out_1.assume_init() },
             health: unsafe { out_2.assume_init() },
         }),
         raw::TYPE_SNAKE_BODY => Observation::SnakeBody(SnakeInfo {
-            owner_id: unsafe { out_0.assume_init() },
+            team_id: unsafe { out_0.assume_init() },
             snake_id: unsafe { out_1.assume_init() },
             health: unsafe { out_2.assume_init() },
         }),
