@@ -1,5 +1,5 @@
 [package]
-name = "snake_vm"
+name = "snake_sdk"
 version = "0.1.0"
 authors = ["Nathan Fox <fuchsnj@gmail.com>"]
 edition = "2021"
