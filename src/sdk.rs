@@ -120,7 +120,8 @@ pub fn suicide() {
 /// If the snake has a length of at least 9, it is eligible to split into two.
 /// The snake is split into three parts (the middle is rounded up, the rest down). The first part will remain as
 /// the original snake. The middle part will be lost and turn into (poisonous) food. The end will become a new
-/// snake. The virtual machine running the snake will be forked, and both new snakes will run independently.
+/// snake. The snake runtime will be forked, and both new snakes will continue to run independently.
+/// You can use `get_id` to determine which snake is now running.
 pub fn split() {
     unsafe { raw::split() }
 }
@@ -135,7 +136,7 @@ pub fn get_team_id() -> u32 {
     unsafe { raw::get_team_id() }
 }
 
-/// View a certain position on the arena.
+/// View a certain position in the arena.
 pub fn observe(x: u32, y: u32) -> Observation {
     let mut type_out = MaybeUninit::<u32>::uninit();
     let mut out_0 = MaybeUninit::<u32>::uninit();
