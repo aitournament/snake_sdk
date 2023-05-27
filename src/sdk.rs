@@ -32,7 +32,7 @@ pub struct SnakeInfo {
     pub health: u32,
 }
 
-/// Gets the number of CPU cycles executed per tick. This is constant.
+/// Get the number of CPU cycles executed per tick. This is constant.
 pub fn get_cpu_cycles_per_tick() -> u32 {
     unsafe { raw::get_cpu_cycles_per_tick() }
 }
@@ -107,7 +107,7 @@ pub fn get_current_tick() -> u64 {
     unsafe { raw::get_current_tick() }
 }
 
-/// Gets the number of CPU cycles that have already executed in the current tick.
+/// Get the number of CPU cycles that have already executed in the current tick.
 pub fn get_current_cpu_cycle_in_tick() -> u64 {
     unsafe { raw::get_current_cpu_cycle_in_tick() }
 }
