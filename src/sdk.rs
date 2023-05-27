@@ -48,16 +48,14 @@ pub fn set_direction(direction: Direction) {
 /// If the snake isn't manually moved, it will be automatically called at the end of the tick.
 /// Note that this takes effect on the exact CPU cycle it is called. This means that all
 /// snakes do not necessarily move at the same time (you can pick when during the tick the move occurs).
-/// If this is incorrectly called, the snake will die from exhaustion.
 pub fn move_snake() {
     unsafe { raw::r#move() };
 }
 
 /// A leap is an additional move that can occur at most once every 2 ticks.
 /// It must only be called during a tick in which a move has already been performed, and
-/// a leap was not performed during the previous tick.
-/// Performing a leap will consume the last body part of this snake, which will drop on the floor as food.
-/// If this is incorrectly called, the snake will die from exhaustion.
+/// a leap was not performed during the current or previous tick.
+/// Performing a leap will consume the last body part of this snake, which will drop on the floor as (poisonous) food.
 pub fn leap() {
     unsafe {
         raw::leap();
