@@ -62,8 +62,7 @@ pub fn leap() {
     }
 }
 
-/// Sleep (do nothing) for all remaining CPU cycles in the current tick. There is no difference in sleeping
-/// vs "busy waiting" manually, this is just for convenience.
+/// Sleep (do nothing) for all remaining CPU cycles in the current tick.
 pub fn sleep_remaining_tick() {
     unsafe {
         raw::sleep_remaining_tick();
