@@ -117,7 +117,7 @@ pub fn suicide() {
     unsafe { raw::suicide() }
 }
 
-/// If the snake has a length of at least 9, it is eligible to split into two parts.
+/// If the snake has a length of at least 9, it is eligible to split into two.
 /// The snake is split into three parts (the middle is rounded up, the rest down). The first part will remain as
 /// the original snake. The middle part will be lost and turn into (poisonous) food. The end will become a new
 /// snake. The virtual machine running the snake will be forked, and both new snakes will run independently.
