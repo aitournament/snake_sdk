@@ -45,6 +45,7 @@ extern "C" {
     );
 
     pub fn get_id() -> u32;
+    pub fn get_team_id() -> u32;
     pub fn get_length() -> u32;
     pub fn get_health() -> u32;
     pub fn get_current_tick() -> u64;

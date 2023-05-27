@@ -32,17 +32,19 @@ pub struct SnakeInfo {
     pub health: u32,
 }
 
+/// Gets the number of CPU cycles executes per tick. This is constant.
 pub fn get_cpu_cycles_per_tick() -> u32 {
     unsafe { raw::get_cpu_cycles_per_tick() }
 }
 
+/// Sets the direction of the snake. This is the direction the snake will move next.
 pub fn set_direction(direction: Direction) {
     unsafe {
         raw::set_direction(direction as u32);
     }
 }
 
-/// Move immediately (at the end of the current CPU cycle) in the current direction. A snake must move once per tick.
+/// Move immediately in the current direction. A snake must move once per tick.
 /// If the snake isn't manually moved, it will be automatically called at the end of the tick.
 /// Note that this takes effect on the exact CPU cycle it is called. This means that all
 /// snakes do not necessarily move at the same time (you can pick when during the tick the move occurs).
@@ -110,7 +112,7 @@ pub fn get_current_cpu_cycle_in_tick() -> u64 {
     unsafe { raw::get_current_cpu_cycle_in_tick() }
 }
 
-/// Kill the snake (at the end of the current CPU cycle). All parts of the snake will turn into poisonous food.
+/// Kill the snake immediately. All parts of the snake will turn into poisonous food.
 pub fn suicide() {
     unsafe { raw::suicide() }
 }
@@ -126,6 +128,11 @@ pub fn split() {
 /// Get the id of the snake. This is constant, except after a `split`, where the new snake will have a new id.
 pub fn get_id() -> u32 {
     unsafe { raw::get_id() }
+}
+
+/// Get the id of your team. This is constant.
+pub fn get_team_id() -> u32 {
+    unsafe { raw::get_team_id() }
 }
 
 /// View a certain position on the arena.
