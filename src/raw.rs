@@ -22,7 +22,6 @@ extern "C" {
     pub fn get_arena_width() -> u32;
     pub fn get_arena_height() -> u32;
     pub fn get_cpu_cycles_per_tick() -> u32;
-    // pub fn get_owner_id() -> u32;
 
     // actions
     pub fn set_direction(direction: u32);
@@ -35,13 +34,20 @@ extern "C" {
 
     // current position using "screen" coordinates (top-left is 0,0)
     pub fn get_current_pos(x_out: *mut u32, y_out: *mut u32);
+
     pub fn observe(
         x: u32,
         y: u32,
-        out_type: *mut u32,
-        out_0: *mut u32,
-        out_1: *mut u32,
-        out_2: *mut u32,
+
+        /*
+            out array: pointer to an array of length 5 for the results
+            0: type
+            1: team_id (depending on type)
+            2: snake id (depending on type)
+            3: health (depending on type)
+            4: poison value
+        */
+        out: *mut [u32; 5],
     );
 
     pub fn get_id() -> u32;

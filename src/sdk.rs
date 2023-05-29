@@ -12,17 +12,26 @@ pub enum Direction {
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
-pub enum Observation {
-    Empty,
+pub enum ObservationItem {
     Food(FoodInfo),
     SnakeHead(SnakeInfo),
     SnakeBody(SnakeInfo),
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+pub struct Observation {
+    /// The amount of damage to a snakes health if the head of a snake
+    /// is on top of poison at the end of a tick
+    poison: u32,
+
+    /// The item at this location
+    item: Option<ObservationItem>,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct FoodInfo {
-    /// The amount of health that a snake will gain (or lose) by eating this food.
-    pub health_value: i32,
+    /// The amount of health that a snake will gain by eating this food.
+    pub health_value: u32,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
@@ -135,37 +144,38 @@ pub fn get_team_id() -> u32 {
 
 /// View a certain position in the arena.
 pub fn observe(x: u32, y: u32) -> Observation {
-    let mut type_out = MaybeUninit::<u32>::uninit();
-    let mut out_0 = MaybeUninit::<u32>::uninit();
-    let mut out_1 = MaybeUninit::<u32>::uninit();
-    let mut out_2 = MaybeUninit::<u32>::uninit();
-    unsafe {
-        raw::observe(
-            x,
-            y,
-            type_out.as_mut_ptr(),
-            out_0.as_mut_ptr(),
-            out_1.as_mut_ptr(),
-            out_2.as_mut_ptr(),
-        );
-    }
-    match unsafe { type_out.assume_init() } {
-        raw::TYPE_EMPTY => Observation::Empty,
-        raw::TYPE_FOOD => Observation::Food(FoodInfo {
-            health_value: unsafe { out_0.assume_init() as i32 },
-        }),
-        raw::TYPE_SNAKE_HEAD => Observation::SnakeHead(SnakeInfo {
-            team_id: unsafe { out_0.assume_init() },
-            snake_id: unsafe { out_1.assume_init() },
-            health: unsafe { out_2.assume_init() },
-        }),
-        raw::TYPE_SNAKE_BODY => Observation::SnakeBody(SnakeInfo {
-            team_id: unsafe { out_0.assume_init() },
-            snake_id: unsafe { out_1.assume_init() },
-            health: unsafe { out_2.assume_init() },
-        }),
+    const OUT_TYPE: usize = 0;
+    const OUT_TEAM_ID: usize = 1;
+    const OUT_SNAKE_ID: usize = 2;
+    const OUT_HEALTH: usize = 3;
+    const OUT_POISON: usize = 4;
+
+    let mut out = MaybeUninit::<[u32; 5]>::uninit();
+    let out = unsafe {
+        raw::observe(x, y, out.as_mut_ptr());
+        out.assume_init()
+    };
+
+    let poison = out[OUT_POISON];
+    let item = match out[OUT_TYPE] {
+        raw::TYPE_EMPTY => None,
+        raw::TYPE_FOOD => Some(ObservationItem::Food(FoodInfo {
+            health_value: out[OUT_HEALTH],
+        })),
+        raw::TYPE_SNAKE_HEAD => Some(ObservationItem::SnakeHead(SnakeInfo {
+            team_id: out[OUT_TEAM_ID],
+            snake_id: out[OUT_SNAKE_ID],
+            health: out[OUT_HEALTH],
+        })),
+        raw::TYPE_SNAKE_BODY => Some(ObservationItem::SnakeBody(SnakeInfo {
+            team_id: out[OUT_TEAM_ID],
+            snake_id: out[OUT_SNAKE_ID],
+            health: out[OUT_HEALTH],
+        })),
         _ => unsafe { unreachable_unchecked() },
-    }
+    };
+
+    Observation { poison, item }
 }
 
 /// Get the length of the snake.
