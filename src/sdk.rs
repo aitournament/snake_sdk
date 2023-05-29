@@ -22,10 +22,10 @@ pub enum ObservationItem {
 pub struct Observation {
     /// The amount of damage to a snakes health if the head of a snake
     /// is on top of poison at the end of a tick
-    poison: u32,
+    pub poison: u32,
 
     /// The item at this location
-    item: Option<ObservationItem>,
+    pub item: Option<ObservationItem>,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
