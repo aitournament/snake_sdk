@@ -40,7 +40,7 @@ extern "C" {
         y: u32,
 
         /*
-            out array: pointer to an array of length 5 for the results
+            out array: pointer to the first element of an array (length 5)
             0: type
             1: team_id (depending on type)
             2: snake id (depending on type)
