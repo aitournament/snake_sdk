@@ -31,6 +31,7 @@ extern "C" {
     pub fn sleep(cycles: u64);
     pub fn split();
     pub fn suicide();
+    pub fn speak(msg: *const u8, length: u32);
 
     // current position using "screen" coordinates (top-left is 0,0)
     pub fn get_current_pos(x_out: *mut u32, y_out: *mut u32);
@@ -57,4 +58,5 @@ extern "C" {
     pub fn get_current_tick() -> u64;
     pub fn get_current_cpu_cycle_in_tick() -> u64;
     pub fn rand(min: u32, max: u32) -> u32;
+
 }

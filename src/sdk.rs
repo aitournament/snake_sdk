@@ -123,6 +123,12 @@ pub fn suicide() {
     unsafe { raw::suicide() }
 }
 
+/// Logs a message. The maximum length is 50. Any message longer than this will be truncated.
+/// A snake can send at most 2 logs per tick. Any additional logs will be ignored.
+pub fn speak(msg: &str) {
+    unsafe { raw::speak(msg.as_ptr(), msg.len() as u32) }
+}
+
 /// If the snake has a length of at least 9, it is eligible to split into two.
 /// The snake is split into three parts (the middle is rounded up, the rest down). The first part will remain as
 /// the original snake. The middle part will be lost and turn into (poisonous) food. The end will become a new
