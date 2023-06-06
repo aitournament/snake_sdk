@@ -64,7 +64,7 @@ pub fn move_snake() {
 /// A leap is an additional move that can occur at most once every 2 ticks.
 /// It must only be called during a tick in which a move has already been performed, and
 /// a leap was not performed during the current or previous tick.
-/// Performing a leap will consume the last body part of this snake, which will drop on the floor as (poisonous) food.
+/// Performing a leap will consume the last body part of this snake, which will drop on the floor as poison.
 pub fn leap() {
     unsafe {
         raw::leap();
@@ -118,20 +118,20 @@ pub fn get_current_cpu_cycle_in_tick() -> u64 {
     unsafe { raw::get_current_cpu_cycle_in_tick() }
 }
 
-/// Kill the snake immediately. All parts of the snake will turn into poisonous food.
+/// Kill the snake immediately. All parts of the snake will turn into poison.
 pub fn suicide() {
     unsafe { raw::suicide() }
 }
 
 /// Logs a message. The maximum length is 50. Any message longer than this will be truncated.
-/// A snake can send at most 2 logs per tick. Any additional logs will be ignored.
+/// A snake can send at most 10 logs per tick. Any additional logs will be ignored.
 pub fn speak(msg: &str) {
     unsafe { raw::speak(msg.as_ptr(), msg.len() as u32) }
 }
 
 /// If the snake has a length of at least 9, it is eligible to split into two.
 /// The snake is split into three parts (the middle is rounded up, the rest down). The first part will remain as
-/// the original snake. The middle part will be lost and turn into (poisonous) food. The end will become a new
+/// the original snake. The middle part will be lost and turn into poison. The end will become a new
 /// snake. The snake runtime will be forked, and both new snakes will continue to run independently.
 /// You can use `get_id` to determine which snake is now running.
 pub fn split() {
@@ -191,8 +191,7 @@ pub fn get_length() -> u32 {
 
 /// Get the current health of the snake. The maximum health is 100. The health decreases by 1 each tick.
 /// If the health of a snake ever reaches zero, it will die. A snake can gain health by eating food.
-/// Food has a health value, which is the amount health will increase. Food can have a negative health
-/// value (if it's poisonous).
+/// Food increases health. Poison damages health.
 pub fn get_health() -> u32 {
     unsafe { raw::get_health() }
 }
