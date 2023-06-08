@@ -28,7 +28,7 @@ extern "C" {
     pub fn r#move();
     pub fn leap();
     pub fn sleep_remaining_tick();
-    pub fn sleep(cycles: u64);
+    pub fn sleep(cycles: u32);
     pub fn split();
     pub fn suicide();
     pub fn speak(msg: *const u8, length: u32);

@@ -79,7 +79,7 @@ pub fn sleep_remaining_tick() {
 }
 
 /// Sleep (do nothing) for a specific number of cycles.
-pub fn sleep(cycles: u64) {
+pub fn sleep(cycles: u32) {
     unsafe { raw::sleep(cycles) }
 }
 
